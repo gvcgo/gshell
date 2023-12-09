@@ -7,6 +7,10 @@
 *.dll
 *.so
 *.dylib
+examples/ishell/ishell
+examples/ishell/ishell.exe
+examples/gktrl/gktrl
+examples/gktrl/gktrl.exe
 
 # Test binary, built with `go test -c`
 *.test

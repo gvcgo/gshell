@@ -2,9 +2,10 @@ package shell
 
 import (
 	"io"
+	"os"
 
+	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/reeflective/console"
-	"github.com/reeflective/console/commands/readline"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,7 @@ func NewIShell() (s *IShell) {
 	s.Console.NewlineBefore = true
 	s.Console.NewlineAfter = true
 	s.Console.SetPrintLogo(func(c *console.Console) {
-
+		gprint.Yellow("Welcome to gshell!")
 	})
 	return
 }
@@ -30,7 +31,14 @@ func (s *IShell) InitCommand() {
 	if s.RootCmd == nil {
 		s.RootCmd = &cobra.Command{}
 	}
-	s.AddCommand(readline.Commands(s.Console.Shell()))
+	s.AddCommand(&cobra.Command{
+		Use:   "exit",
+		Short: "Exit ishell.",
+		Run: func(cmd *cobra.Command, args []string) {
+			gprint.Yellow("Exiting...")
+			os.Exit(0)
+		},
+	})
 }
 
 func (s *IShell) Start() error {
@@ -79,4 +87,8 @@ func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
 			cmd.AddCommand(cmds...)
 		}
 	}
+}
+
+func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {
+	s.Console.SetPrintLogo(f)
 }
