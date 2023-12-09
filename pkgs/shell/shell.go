@@ -33,7 +33,7 @@ func (s *IShell) InitCommand() {
 	}
 	s.AddCommand(&cobra.Command{
 		Use:   "exit",
-		Short: "Exit ishell.",
+		Short: "Exit gshell.",
 		Run: func(cmd *cobra.Command, args []string) {
 			gprint.Yellow("Exiting...")
 			os.Exit(0)
