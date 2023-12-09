@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/reeflective/console"
+	"github.com/reeflective/console/commands/readline"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +30,7 @@ func (s *IShell) InitCommand() {
 	if s.RootCmd == nil {
 		s.RootCmd = &cobra.Command{}
 	}
-	// TODO: some commands by default
+	s.AddCommand(readline.Commands(s.Console.Shell()))
 }
 
 func (s *IShell) Start() error {
@@ -52,6 +53,9 @@ func (s *IShell) Start() error {
 	menu.AddInterrupt(io.EOF, ExitCtrlD)
 
 	menu.SetCommands(func() *cobra.Command {
+		s.RootCmd.InitDefaultHelpCmd()
+		s.RootCmd.CompletionOptions.DisableDefaultCmd = true
+		s.RootCmd.DisableFlagsInUseLine = true
 		return s.RootCmd
 	})
 
@@ -60,9 +64,10 @@ func (s *IShell) Start() error {
 }
 
 func (s *IShell) AddCommand(cmds ...*cobra.Command) {
-	if s.RootCmd != nil {
-		s.RootCmd.AddCommand(cmds...)
+	if s.RootCmd == nil {
+		return
 	}
+	s.RootCmd.AddCommand(cmds...)
 }
 
 func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
