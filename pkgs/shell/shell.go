@@ -49,12 +49,6 @@ func (s *IShell) Start() error {
 	// Set some custom prompt handlers for this menu.
 	SetupPrompt(menu)
 
-	// All menus currently each have a distinct, in-memory history source.
-	// Replace the main (current) menu's history with one writing to our
-	// application history file. The default history is named after its menu.
-	hist, _ := EmbeddedHistory(".example-history")
-	menu.AddHistorySource("local history", hist)
-
 	// We bind a special handler for this menu, which will exit the
 	// application (with confirm), when the shell readline receives
 	// a Ctrl-D keystroke. You can map any error to any handler.
@@ -97,4 +91,16 @@ func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
 
 func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {
 	s.Console.SetPrintLogo(f)
+}
+
+func (s *IShell) SetHistoryFilePath(fPath string) {
+	menu := s.Console.ActiveMenu()
+	// All menus currently each have a distinct, in-memory history source.
+	// Replace the main (current) menu's history with one writing to our
+	// application history file. The default history is named after its menu.
+	if fPath == "" {
+		fPath = ".gshell_local_history"
+	}
+	hist, _ := EmbeddedHistory(fPath)
+	menu.AddHistorySource("local_history", hist)
 }

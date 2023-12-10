@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	ArgsPattern string = "args_%s"
+	PingRoute string = "/ping"
 )
 
 type Ktrl struct {
@@ -89,15 +89,15 @@ func (k *Ktrl) getResult(ctx *KtrlContext) {
 			params[opt.Name] = v
 		}
 	}
-	if len(ctx.Args) > 0 {
-		params[fmt.Sprintf(ArgsPattern, ctx.Command.Name())] = strings.Join(ctx.Args, ",")
+	if len(ctx.args) > 0 {
+		params[QueryArgsName] = strings.Join(ctx.args, ",")
 	}
 
 	var kUrl string
 	if k.conf.SockDir != "" {
-		kUrl = fmt.Sprintf("http://%s/%s/%s", k.conf.SockName, ctx.Route, k.parseParams(params))
+		kUrl = fmt.Sprintf("http://%s%s%s", k.conf.SockName, ctx.Route, k.parseParams(params))
 	} else {
-		kUrl = fmt.Sprintf("http://%s:%d/%s/%s", k.conf.ServerHost, k.conf.ServerPort, ctx.Route, k.parseParams(params))
+		kUrl = fmt.Sprintf("http://%s:%d%s%s", k.conf.ServerHost, k.conf.ServerPort, ctx.Route, k.parseParams(params))
 	}
 	resp, err := k.client.Get(kUrl)
 	if err != nil {
@@ -117,15 +117,12 @@ func (k *Ktrl) addShellCmd() {
 			Short: c.HelpStr,
 			Long:  c.LongHelpStr,
 			Run: func(cmd *cobra.Command, args []string) {
-				route := c.Name
-				if c.Parent != "" {
-					route = c.Parent + "/" + c.Name
-				}
 				ctx := &KtrlContext{
 					Command: cmd,
-					Args:    args,
+					args:    args,
 					Options: c.Options,
-					Route:   route,
+					Route:   c.GetRoute(),
+					Type:    ContextTypeClient,
 				}
 				k.getResult(ctx)
 				c.RunFunc(ctx)
@@ -135,11 +132,11 @@ func (k *Ktrl) addShellCmd() {
 		for _, opt := range c.Options {
 			switch opt.Type {
 			case "bool":
-				icmd.Flags().Bool(opt.Name, false, opt.Usage)
+				icmd.Flags().Bool(opt.Name, gconv.Bool(opt.Default), opt.Usage)
 			case "int":
-				icmd.Flags().Int(opt.Name, 0, opt.Usage)
+				icmd.Flags().Int(opt.Name, gconv.Int(opt.Default), opt.Usage)
 			case "float":
-				icmd.Flags().Float64(opt.Name, 0, opt.Usage)
+				icmd.Flags().Float64(opt.Name, gconv.Float64(opt.Default), opt.Usage)
 			default:
 				icmd.Flags().String(opt.Name, opt.Default, opt.Usage)
 			}
@@ -152,12 +149,14 @@ func (k *Ktrl) addShellCmd() {
 	}
 }
 
-func (k *Ktrl) StartShell() {
+func (k *Ktrl) StartShell() error {
 	if k.iShell == nil {
 		k.iShell = shell.NewIShell()
+		k.iShell.SetHistoryFilePath(k.conf.HistoryFilePath)
 	}
 	k.addShellCmd()
-	k.iShell.Start()
+	err := k.iShell.Start()
+	return err
 }
 
 /*
@@ -172,12 +171,43 @@ func (k *Ktrl) initEngine() {
 
 func (k *Ktrl) addServerHandlers() {
 	k.initEngine()
-	// TODO: add handlers
+	for _, c := range k.commands {
+		ctx := &KtrlContext{
+			Route:   c.GetRoute(),
+			Options: c.Options,
+			Type:    ContextTypeServer,
+		}
+		k.engine.GET(ctx.Route, func(gctx *gin.Context) {
+			ctx.GinCtx = gctx
+			c.Handler(ctx)
+		})
+	}
+	// Check if server is running.
+	k.engine.GET(PingRoute, func(gctx *gin.Context) {
+		gctx.JSON(200, gin.H{"message": "pong"})
+	})
 }
 
-func (k *Ktrl) listen() {
+func (k *Ktrl) listen() error {
 	k.initEngine()
-	// TODO: listen
+	var listener net.Listener
+	if k.conf.SockDir != "" && k.conf.SockName != "" {
+		unixAddr, err := net.ResolveUnixAddr("unix", filepath.Join(k.conf.SockDir, k.conf.SockName))
+		if err != nil {
+			return err
+		}
+		listener, err = net.ListenUnix("unix", unixAddr)
+		if err != nil {
+			return err
+		}
+	} else if k.conf.ServerHost != "" && k.conf.ServerPort != 0 {
+		var err error
+		listener, err = net.Listen("tcp", fmt.Sprintf("%s:%d", k.conf.ServerHost, k.conf.ServerPort))
+		if err != nil {
+			return err
+		}
+	}
+	return http.Serve(listener, k.engine)
 }
 
 func (k *Ktrl) StartServer() {

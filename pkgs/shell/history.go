@@ -82,6 +82,7 @@ func (h *fileHistory) Write(s string) (int, error) {
 	if len(h.lines) == 0 || h.lines[len(h.lines)-1].Block != block {
 		h.lines = append(h.lines, item)
 	}
+	// TODO: write history lines to file
 	return h.Len(), nil
 }
 
