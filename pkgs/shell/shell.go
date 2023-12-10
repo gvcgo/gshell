@@ -93,7 +93,7 @@ func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {
 	s.Console.SetPrintLogo(f)
 }
 
-func (s *IShell) SetHistoryFilePath(fPath string) {
+func (s *IShell) SetHistoryFilePath(fPath string, maxLine int, enableLocal ...bool) {
 	menu := s.Console.ActiveMenu()
 	// All menus currently each have a distinct, in-memory history source.
 	// Replace the main (current) menu's history with one writing to our
@@ -101,6 +101,6 @@ func (s *IShell) SetHistoryFilePath(fPath string) {
 	if fPath == "" {
 		fPath = ".gshell_local_history"
 	}
-	hist, _ := EmbeddedHistory(fPath)
+	hist, _ := EmbeddedHistory(fPath, maxLine, enableLocal...)
 	menu.AddHistorySource("local_history", hist)
 }

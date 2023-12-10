@@ -2,17 +2,16 @@ package shell
 
 import (
 	"bufio"
-	"embed"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
+	"github.com/moqsien/goutils/pkgs/gutils"
 	"github.com/reeflective/readline"
 )
-
-var historyFile embed.FS
 
 var (
 	ErrOpenHistoryFile = errors.New("failed to open history file")
@@ -21,8 +20,10 @@ var (
 )
 
 type fileHistory struct {
-	file  string
-	lines []Item
+	file        string
+	lines       []Item
+	enableLocal bool
+	maxLines    int
 }
 
 type Item struct {
@@ -32,10 +33,14 @@ type Item struct {
 }
 
 // NewSourceFromFile returns a new history source writing to and reading from a file.
-func EmbeddedHistory(file string) (readline.History, error) {
+func EmbeddedHistory(file string, maxLines int, enableLocal ...bool) (readline.History, error) {
 	var err error
 
 	hist := new(fileHistory)
+	hist.SetMaxLines(maxLines)
+	if len(enableLocal) > 0 && enableLocal[0] {
+		hist.EnableLocalFile()
+	}
 	hist.file = file
 	hist.lines, err = openHist(file)
 
@@ -43,7 +48,7 @@ func EmbeddedHistory(file string) (readline.History, error) {
 }
 
 func openHist(filename string) (list []Item, err error) {
-	file, err := historyFile.Open(filename)
+	file, err := os.Open(filename)
 	if err != nil {
 		return list, fmt.Errorf("error opening history file: %s", err.Error())
 	}
@@ -66,6 +71,18 @@ func openHist(filename string) (list []Item, err error) {
 	return list, nil
 }
 
+func (h *fileHistory) EnableLocalFile() {
+	h.enableLocal = true
+}
+
+func (h *fileHistory) SetMaxLines(maxLines int) {
+	if h.maxLines > 0 {
+		h.maxLines = maxLines
+	} else {
+		h.maxLines = 300
+	}
+}
+
 // Write item to history file.
 func (h *fileHistory) Write(s string) (int, error) {
 	block := strings.TrimSpace(s)
@@ -82,7 +99,29 @@ func (h *fileHistory) Write(s string) (int, error) {
 	if len(h.lines) == 0 || h.lines[len(h.lines)-1].Block != block {
 		h.lines = append(h.lines, item)
 	}
-	// TODO: write history lines to file
+
+	// store history items to local file.
+	if h.enableLocal {
+		var (
+			content []byte
+			err     error
+		)
+		// read history.
+		if ok, _ := gutils.PathIsExist(h.file); ok {
+			content, err = os.ReadFile(h.file)
+			if err != nil {
+				return h.Len(), err
+			}
+		}
+
+		// save to file.
+		if itemByte, err := json.Marshal(item); err != nil {
+			return h.Len(), err
+		} else {
+			strContent := string(content) + "\n" + string(itemByte)
+			os.WriteFile(h.file, []byte(strContent), 0666)
+		}
+	}
 	return h.Len(), nil
 }
 

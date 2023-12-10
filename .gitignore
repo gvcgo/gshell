@@ -23,3 +23,5 @@ examples/gktrl/gktrl.exe
 
 # Go workspace file
 go.work
+
+.gshell_history

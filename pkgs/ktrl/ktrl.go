@@ -152,7 +152,7 @@ func (k *Ktrl) addShellCmd() {
 func (k *Ktrl) StartShell() error {
 	if k.iShell == nil {
 		k.iShell = shell.NewIShell()
-		k.iShell.SetHistoryFilePath(k.conf.HistoryFilePath)
+		k.iShell.SetHistoryFilePath(k.conf.HistoryFilePath, k.conf.MaxHistoryLines, true)
 	}
 	k.addShellCmd()
 	err := k.iShell.Start()
