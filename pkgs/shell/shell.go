@@ -85,8 +85,14 @@ func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
 	for _, cmd := range s.RootCmd.Commands() {
 		if cmd.Name() == parent {
 			cmd.AddCommand(cmds...)
+			return
 		}
 	}
+
+	s.RootCmd.AddCommand(&cobra.Command{
+		Use: parent,
+	})
+	s.AddSubCommand(parent, cmds...)
 }
 
 func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {
