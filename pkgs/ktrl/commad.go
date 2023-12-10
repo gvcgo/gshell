@@ -20,11 +20,12 @@ const (
 	QueryArgsName     string = "queryArgs"
 )
 
+// Cobra Flags
 type Option struct {
-	Name    string
-	Type    string
-	Default string
-	Usage   string
+	Name    string // flag name
+	Type    string // flag type
+	Default string // default value
+	Usage   string // flag help info
 }
 
 type KtrlContext struct {
@@ -37,6 +38,7 @@ type KtrlContext struct {
 	Type    int8
 }
 
+// Send reponse back to client.
 func (kctx *KtrlContext) SendResponse(content interface{}, code ...int) {
 	if kctx.GinCtx != nil {
 		statusCode := http.StatusOK
@@ -101,15 +103,16 @@ func (kctx *KtrlContext) GetFloat(name string) float64 {
 }
 
 type KtrlCommand struct {
-	Name        string
-	Parent      string
-	HelpStr     string
-	LongHelpStr string
-	Options     []*Option
-	RunFunc     func(ctx *KtrlContext)
-	Handler     func(ctx *KtrlContext)
+	Name        string                 // cmd name
+	Parent      string                 // parent cmd name
+	HelpStr     string                 // Short for cobra cmd
+	LongHelpStr string                 // Long for cobra cmd
+	Options     []*Option              // flags for cobra
+	RunFunc     func(ctx *KtrlContext) // Not Nil. Hook for cobra.
+	Handler     func(ctx *KtrlContext) // Not Nil. Handler for server.
 }
 
+// Route for current cmd.
 func (kc *KtrlCommand) GetRoute() string {
 	if kc.Parent == "" {
 		return fmt.Sprintf("/%s/", kc.Name)
