@@ -60,7 +60,8 @@ func (kctx *KtrlContext) SendResponse(content interface{}, code ...int) {
 	}
 }
 
-func (kctx *KtrlContext) parseFlags() {
+// parse flags and args for server.
+func (kctx *KtrlContext) parseFlagsArgs() {
 	if kctx.Type == ContextTypeServer && kctx.Command == nil && kctx.GinCtx != nil {
 		kctx.Command = &cobra.Command{}
 		for _, opt := range kctx.Options {
@@ -76,25 +77,25 @@ func (kctx *KtrlContext) GetArgs() []string {
 }
 
 func (kctx *KtrlContext) GetString(name string) string {
-	kctx.parseFlags()
+	kctx.parseFlagsArgs()
 	val, _ := kctx.Command.Flags().GetString(name)
 	return val
 }
 
 func (kctx *KtrlContext) GetBool(name string) bool {
-	kctx.parseFlags()
+	kctx.parseFlagsArgs()
 	val, _ := kctx.Command.Flags().GetBool(name)
 	return val
 }
 
 func (kctx *KtrlContext) GetInt(name string) int {
-	kctx.parseFlags()
+	kctx.parseFlagsArgs()
 	val, _ := kctx.Command.Flags().GetInt(name)
 	return val
 }
 
 func (kctx *KtrlContext) GetFloat(name string) float64 {
-	kctx.parseFlags()
+	kctx.parseFlagsArgs()
 	val, _ := kctx.Command.Flags().GetFloat64(name)
 	return val
 }
@@ -111,7 +112,7 @@ type KtrlCommand struct {
 
 func (kc *KtrlCommand) GetRoute() string {
 	if kc.Parent == "" {
-		return kc.Name
+		return fmt.Sprintf("/%s/", kc.Name)
 	} else {
 		return fmt.Sprintf("/%s/%s/", kc.Parent, kc.Name)
 	}

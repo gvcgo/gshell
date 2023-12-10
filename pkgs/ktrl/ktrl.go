@@ -60,6 +60,7 @@ func (k *Ktrl) parseParams(params map[string]string) (p string) {
 func (k *Ktrl) getResult(ctx *KtrlContext) {
 	if k.client == nil {
 		if k.conf.SockDir != "" && k.conf.SockName != "" {
+			// Unix socket
 			k.client = &http.Client{}
 			k.client.Transport = &http.Transport{
 				DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
@@ -67,6 +68,7 @@ func (k *Ktrl) getResult(ctx *KtrlContext) {
 				},
 			}
 		} else if k.conf.ServerPort != 0 && k.conf.ServerHost != "" {
+			// TCP
 			k.client = &http.Client{}
 		} else {
 			return
@@ -75,13 +77,13 @@ func (k *Ktrl) getResult(ctx *KtrlContext) {
 	params := map[string]string{}
 	for _, opt := range ctx.Options {
 		switch opt.Type {
-		case "bool":
+		case OptionTypeBool:
 			v, _ := ctx.Command.Flags().GetBool(opt.Name)
 			params[opt.Name] = gconv.String(v)
-		case "int":
+		case OptionTypeInt:
 			v, _ := ctx.Command.Flags().GetInt(opt.Name)
 			params[opt.Name] = gconv.String(v)
-		case "float":
+		case OptionTypeFloat:
 			v, _ := ctx.Command.Flags().GetFloat64(opt.Name)
 			params[opt.Name] = gconv.String(v)
 		default:
@@ -131,11 +133,11 @@ func (k *Ktrl) addShellCmd() {
 
 		for _, opt := range c.Options {
 			switch opt.Type {
-			case "bool":
+			case OptionTypeBool:
 				icmd.Flags().Bool(opt.Name, gconv.Bool(opt.Default), opt.Usage)
-			case "int":
+			case OptionTypeInt:
 				icmd.Flags().Int(opt.Name, gconv.Int(opt.Default), opt.Usage)
-			case "float":
+			case OptionTypeFloat:
 				icmd.Flags().Float64(opt.Name, gconv.Float64(opt.Default), opt.Usage)
 			default:
 				icmd.Flags().String(opt.Name, opt.Default, opt.Usage)
