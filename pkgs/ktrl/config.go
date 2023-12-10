@@ -5,8 +5,9 @@ const (
 )
 
 type KtrlConf struct {
-	SockPath        string
-	ServerPort      int
-	ServerIP        string
-	HistoryFilePath string
+	SockDir         string // unix socket file directory
+	SockName        string // unix socket file name
+	ServerPort      int    // remote server port
+	ServerHost      string // remote server host
+	HistoryFilePath string // gshell history file path
 }

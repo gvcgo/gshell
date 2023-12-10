@@ -13,22 +13,27 @@ const (
 )
 
 type Option struct {
-	Name  string
-	Type  string
-	Value string
+	Name    string
+	Type    string
+	Default string
+	Usage   string
 }
 
 type KtrlContext struct {
 	Ctx     *gin.Context
 	Command *cobra.Command
+	Route   string
 	Args    []string
 	Options []*Option
+	Result  []byte
 }
 
 type KtrlCommand struct {
-	Name    string
-	Parent  string
-	Options []*Option
-	RunFunc func(ctx *KtrlContext)
-	Handler func(ctx *KtrlContext)
+	Name        string
+	Parent      string
+	HelpStr     string
+	LongHelpStr string
+	Options     []*Option
+	RunFunc     func(ctx *KtrlContext)
+	Handler     func(ctx *KtrlContext)
 }
