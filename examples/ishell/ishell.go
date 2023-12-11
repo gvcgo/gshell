@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 
+	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/reeflective/console"
 	"github.com/spf13/cobra"
 )
 
@@ -29,5 +31,9 @@ func main() {
 		},
 	})
 	ishell.SetHistoryFilePath(".gshell_history", 300, true)
+	// print logo when shell started.
+	ishell.SetPrintLogo(func(_ *console.Console) {
+		gprint.Yellow("Welcome to gshell!")
+	})
 	ishell.Start()
 }

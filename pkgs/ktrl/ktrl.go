@@ -15,6 +15,7 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/moqsien/goutils/pkgs/gutils"
 	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/reeflective/console"
 	"github.com/spf13/cobra"
 )
 
@@ -167,6 +168,10 @@ func (k *Ktrl) addShellCmd() {
 			k.iShell.AddSubCommand(c.Parent, icmd)
 		}
 	}
+}
+
+func (k *Ktrl) SetPrintLogo(f func(_ *console.Console)) {
+	k.iShell.SetPrintLogo(f)
 }
 
 func (k *Ktrl) StartShell() error {
