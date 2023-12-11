@@ -118,11 +118,26 @@ func (h *fileHistory) Write(s string) (int, error) {
 		if itemByte, err := json.Marshal(item); err != nil {
 			return h.Len(), err
 		} else {
-			strContent := string(content) + "\n" + string(itemByte)
-			os.WriteFile(h.file, []byte(strContent), 0666)
+			// strContent := string(content) + "\n" + string(itemByte)
+			// os.WriteFile(h.file, []byte(strContent), 0666)
+			h.writeLine(content, itemByte)
 		}
 	}
 	return h.Len(), nil
+}
+
+func (h *fileHistory) writeLine(content []byte, itemByte []byte) {
+	var result string
+	if h.maxLines > 0 && strings.Count(string(content), "\n") >= (h.maxLines-1) {
+		sList := strings.Split(string(content), "\n")
+		sList = sList[1:]
+		result = strings.Join(sList, "\n") + "\n" + string(itemByte)
+	} else {
+		result = string(content) + "\n" + string(itemByte)
+	}
+	if result != "" {
+		os.WriteFile(h.file, []byte(result), 0666)
+	}
 }
 
 // GetLine returns a specific line from the history file.

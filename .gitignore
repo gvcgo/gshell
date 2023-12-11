@@ -25,3 +25,5 @@ examples/gktrl/gktrl.exe
 go.work
 
 .gshell_history
+
+*.sock

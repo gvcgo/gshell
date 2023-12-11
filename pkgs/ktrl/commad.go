@@ -7,25 +7,29 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/spf13/cobra"
 )
 
+type FlagType string
+
 const (
-	OptionTypeString  string = "string"
-	OptionTypeBool    string = "bool"
-	OptionTypeInt     string = "int"
-	OptionTypeFloat   string = "float"
-	ContextTypeClient int8   = 1
-	ContextTypeServer int8   = 2
-	QueryArgsName     string = "queryArgs"
+	OptionTypeString  FlagType = "string"
+	OptionTypeBool    FlagType = "bool"
+	OptionTypeInt     FlagType = "int"
+	OptionTypeFloat   FlagType = "float"
+	ContextTypeClient int8     = 1
+	ContextTypeServer int8     = 2
+	QueryArgsName     string   = "queryArgs"
 )
 
 // Cobra Flags
 type Option struct {
-	Name    string // flag name
-	Type    string // flag type
-	Default string // default value
-	Usage   string // flag help info
+	Name    string   // flag name
+	Short   string   // flag shorthand
+	Type    FlagType // flag type
+	Default string   // default value
+	Usage   string   // flag help info
 }
 
 type KtrlContext struct {
@@ -63,43 +67,51 @@ func (kctx *KtrlContext) SendResponse(content interface{}, code ...int) {
 }
 
 // parse flags and args for server.
-func (kctx *KtrlContext) parseFlagsArgs() {
-	if kctx.Type == ContextTypeServer && kctx.Command == nil && kctx.GinCtx != nil {
-		kctx.Command = &cobra.Command{}
-		for _, opt := range kctx.Options {
-			kctx.Command.Flags().Set(opt.Name, kctx.GinCtx.Query(opt.Name))
-		}
-		argListStr := kctx.GinCtx.Query(QueryArgsName)
-		kctx.args = strings.Split(argListStr, ",")
-	}
-}
-
 func (kctx *KtrlContext) GetArgs() []string {
+	if kctx.Type == ContextTypeServer && kctx.GinCtx != nil {
+		args := kctx.GinCtx.Query(QueryArgsName)
+		kctx.args = strings.Split(args, ",")
+	}
 	return kctx.args
 }
 
-func (kctx *KtrlContext) GetString(name string) string {
-	kctx.parseFlagsArgs()
-	val, _ := kctx.Command.Flags().GetString(name)
-	return val
+func (kctx *KtrlContext) GetString(name string) (r string) {
+	if kctx.Type == ContextTypeClient {
+		r, _ = kctx.Command.Flags().GetString(name)
+	} else {
+		r = kctx.GinCtx.Query(name)
+	}
+	return
 }
 
-func (kctx *KtrlContext) GetBool(name string) bool {
-	kctx.parseFlagsArgs()
-	val, _ := kctx.Command.Flags().GetBool(name)
-	return val
+func (kctx *KtrlContext) GetBool(name string) (r bool) {
+	if kctx.Type == ContextTypeClient {
+		r, _ = kctx.Command.Flags().GetBool(name)
+	} else {
+		str := kctx.GinCtx.Query(name)
+		r = gconv.Bool(str)
+	}
+	return
 }
 
-func (kctx *KtrlContext) GetInt(name string) int {
-	kctx.parseFlagsArgs()
-	val, _ := kctx.Command.Flags().GetInt(name)
-	return val
+func (kctx *KtrlContext) GetInt(name string) (r int) {
+	if kctx.Type == ContextTypeClient {
+		r, _ = kctx.Command.Flags().GetInt(name)
+	} else {
+		str := kctx.GinCtx.Query(name)
+		r = gconv.Int(str)
+	}
+	return
 }
 
-func (kctx *KtrlContext) GetFloat(name string) float64 {
-	kctx.parseFlagsArgs()
-	val, _ := kctx.Command.Flags().GetFloat64(name)
-	return val
+func (kctx *KtrlContext) GetFloat(name string) (r float64) {
+	if kctx.Type == ContextTypeClient {
+		r, _ = kctx.Command.Flags().GetFloat64(name)
+	} else {
+		str := kctx.GinCtx.Query(name)
+		r = gconv.Float64(str)
+	}
+	return
 }
 
 type KtrlCommand struct {

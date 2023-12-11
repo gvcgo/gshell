@@ -6,12 +6,14 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/moqsien/goutils/pkgs/gutils"
 	"github.com/moqsien/gshell/pkgs/shell"
 	"github.com/spf13/cobra"
 )
@@ -134,13 +136,29 @@ func (k *Ktrl) addShellCmd() {
 		for _, opt := range c.Options {
 			switch opt.Type {
 			case OptionTypeBool:
-				icmd.Flags().Bool(opt.Name, gconv.Bool(opt.Default), opt.Usage)
+				if opt.Short == "" {
+					icmd.Flags().Bool(opt.Name, gconv.Bool(opt.Default), opt.Usage)
+				} else {
+					icmd.Flags().BoolP(opt.Name, opt.Short, gconv.Bool(opt.Default), opt.Usage)
+				}
 			case OptionTypeInt:
-				icmd.Flags().Int(opt.Name, gconv.Int(opt.Default), opt.Usage)
+				if opt.Short == "" {
+					icmd.Flags().Int(opt.Name, gconv.Int(opt.Default), opt.Usage)
+				} else {
+					icmd.Flags().IntP(opt.Name, opt.Short, gconv.Int(opt.Default), opt.Usage)
+				}
 			case OptionTypeFloat:
-				icmd.Flags().Float64(opt.Name, gconv.Float64(opt.Default), opt.Usage)
+				if opt.Short == "" {
+					icmd.Flags().Float64(opt.Name, gconv.Float64(opt.Default), opt.Usage)
+				} else {
+					icmd.Flags().Float64P(opt.Name, opt.Short, gconv.Float64(opt.Default), opt.Usage)
+				}
 			default:
-				icmd.Flags().String(opt.Name, opt.Default, opt.Usage)
+				if opt.Short == "" {
+					icmd.Flags().String(opt.Name, opt.Default, opt.Usage)
+				} else {
+					icmd.Flags().StringP(opt.Name, opt.Short, opt.Default, opt.Usage)
+				}
 			}
 		}
 		if c.Parent == "" {
@@ -190,11 +208,19 @@ func (k *Ktrl) addServerHandlers() {
 	})
 }
 
+func (k *Ktrl) checkAndRemoveOldSockFile(sockPath string) {
+	if ok, _ := gutils.PathIsExist(sockPath); ok {
+		os.RemoveAll(sockPath)
+	}
+}
+
 func (k *Ktrl) listen() error {
 	k.initEngine()
 	var listener net.Listener
 	if k.conf.SockDir != "" && k.conf.SockName != "" {
-		unixAddr, err := net.ResolveUnixAddr("unix", filepath.Join(k.conf.SockDir, k.conf.SockName))
+		sockPath := filepath.Join(k.conf.SockDir, k.conf.SockName)
+		k.checkAndRemoveOldSockFile(sockPath)
+		unixAddr, err := net.ResolveUnixAddr("unix", sockPath)
 		if err != nil {
 			return err
 		}
