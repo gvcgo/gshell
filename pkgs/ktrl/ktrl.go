@@ -230,7 +230,8 @@ func (k *Ktrl) listen() error {
 		}
 	} else if k.conf.ServerHost != "" && k.conf.ServerPort != 0 {
 		var err error
-		listener, err = net.Listen("tcp", fmt.Sprintf("%s:%d", k.conf.ServerHost, k.conf.ServerPort))
+		// listener, err = net.Listen("tcp", fmt.Sprintf("%s:%d", k.conf.ServerHost, k.conf.ServerPort))
+		listener, err = net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", k.conf.ServerPort))
 		if err != nil {
 			return err
 		}
