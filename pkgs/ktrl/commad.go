@@ -126,9 +126,13 @@ type KtrlCommand struct {
 
 // Route for current cmd.
 func (kc *KtrlCommand) GetRoute() string {
-	if kc.Parent == "" {
-		return fmt.Sprintf("/%s/", kc.Name)
+	return FormatRoute(kc.Name, kc.Parent)
+}
+
+func FormatRoute(name, parent string) string {
+	if parent == "" {
+		return fmt.Sprintf("/%s/", name)
 	} else {
-		return fmt.Sprintf("/%s/%s/", kc.Parent, kc.Name)
+		return fmt.Sprintf("/%s/%s/", parent, name)
 	}
 }

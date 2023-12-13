@@ -60,7 +60,7 @@ func (k *Ktrl) parseParams(params map[string]string) (p string) {
 	return
 }
 
-func (k *Ktrl) getResult(ctx *KtrlContext) {
+func (k *Ktrl) getClient() {
 	if k.client == nil {
 		if k.conf.SockDir != "" && k.conf.SockName != "" {
 			// Unix socket
@@ -77,23 +77,37 @@ func (k *Ktrl) getResult(ctx *KtrlContext) {
 			return
 		}
 	}
+}
+
+func (k *Ktrl) getResult(ctx *KtrlContext) {
+	k.getClient()
+	if k.client == nil {
+		return
+	}
 	params := map[string]string{}
-	for _, opt := range ctx.Options {
-		switch opt.Type {
-		case OptionTypeBool:
-			v, _ := ctx.Command.Flags().GetBool(opt.Name)
-			params[opt.Name] = gconv.String(v)
-		case OptionTypeInt:
-			v, _ := ctx.Command.Flags().GetInt(opt.Name)
-			params[opt.Name] = gconv.String(v)
-		case OptionTypeFloat:
-			v, _ := ctx.Command.Flags().GetFloat64(opt.Name)
-			params[opt.Name] = gconv.String(v)
-		default:
-			v, _ := ctx.Command.Flags().GetString(opt.Name)
-			params[opt.Name] = v
+	if ctx.Command != nil {
+		for _, opt := range ctx.Options {
+			switch opt.Type {
+			case OptionTypeBool:
+				v, _ := ctx.Command.Flags().GetBool(opt.Name)
+				params[opt.Name] = gconv.String(v)
+			case OptionTypeInt:
+				v, _ := ctx.Command.Flags().GetInt(opt.Name)
+				params[opt.Name] = gconv.String(v)
+			case OptionTypeFloat:
+				v, _ := ctx.Command.Flags().GetFloat64(opt.Name)
+				params[opt.Name] = gconv.String(v)
+			default:
+				v, _ := ctx.Command.Flags().GetString(opt.Name)
+				params[opt.Name] = v
+			}
+		}
+	} else {
+		for _, opt := range ctx.Options {
+			params[opt.Name] = opt.Default
 		}
 	}
+
 	if len(ctx.args) > 0 {
 		params[QueryArgsName] = strings.Join(ctx.args, ",")
 	}
@@ -168,6 +182,19 @@ func (k *Ktrl) addShellCmd() {
 			k.iShell.AddSubCommand(c.Parent, icmd)
 		}
 	}
+}
+
+// Send msg to server manually.
+func (k *Ktrl) SendMsg(name, parent string, options []*Option, args ...string) (r []byte) {
+	ctx := &KtrlContext{
+		Command: nil,
+		args:    args,
+		Options: options,
+		Route:   FormatRoute(name, parent),
+		Type:    ContextTypeClient,
+	}
+	k.getResult(ctx)
+	return ctx.Result
 }
 
 func (k *Ktrl) SetPrintLogo(f func(_ *console.Console)) {
