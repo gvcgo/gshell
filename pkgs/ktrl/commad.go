@@ -66,6 +66,10 @@ func (kctx *KtrlContext) SendResponse(content interface{}, code ...int) {
 	}
 }
 
+func (kctx *KtrlContext) SetArgs(args ...string) {
+	kctx.args = args
+}
+
 // parse flags and args for server.
 func (kctx *KtrlContext) GetArgs() []string {
 	if kctx.Type == ContextTypeServer && kctx.GinCtx != nil {
