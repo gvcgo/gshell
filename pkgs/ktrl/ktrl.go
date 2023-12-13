@@ -79,7 +79,7 @@ func (k *Ktrl) getClient() {
 	}
 }
 
-func (k *Ktrl) getResult(ctx *KtrlContext) {
+func (k *Ktrl) GetResult(ctx *KtrlContext) {
 	k.getClient()
 	if k.client == nil {
 		return
@@ -143,7 +143,9 @@ func (k *Ktrl) addShellCmd() {
 					Route:   c.GetRoute(),
 					Type:    ContextTypeClient,
 				}
-				k.getResult(ctx)
+				if !c.SendInRunFunc {
+					k.GetResult(ctx)
+				}
 				c.RunFunc(ctx)
 			},
 		}
@@ -193,7 +195,7 @@ func (k *Ktrl) SendMsg(name, parent string, options []*Option, args ...string) (
 		Route:   FormatRoute(name, parent),
 		Type:    ContextTypeClient,
 	}
-	k.getResult(ctx)
+	k.GetResult(ctx)
 	return ctx.Result
 }
 

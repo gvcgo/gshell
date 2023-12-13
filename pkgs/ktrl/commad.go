@@ -115,13 +115,14 @@ func (kctx *KtrlContext) GetFloat(name string) (r float64) {
 }
 
 type KtrlCommand struct {
-	Name        string                 // cmd name
-	Parent      string                 // parent cmd name
-	HelpStr     string                 // Short for cobra cmd
-	LongHelpStr string                 // Long for cobra cmd
-	Options     []*Option              // flags for cobra
-	RunFunc     func(ctx *KtrlContext) // Not Nil. Hook for cobra.
-	Handler     func(ctx *KtrlContext) // Not Nil. Handler for server.
+	Name          string                 // cmd name
+	Parent        string                 // parent cmd name
+	HelpStr       string                 // Short for cobra cmd
+	LongHelpStr   string                 // Long for cobra cmd
+	SendInRunFunc bool                   // Send request in RunFunc
+	Options       []*Option              // flags for cobra
+	RunFunc       func(ctx *KtrlContext) // Not Nil. Hook for cobra.
+	Handler       func(ctx *KtrlContext) // Not Nil. Handler for server.
 }
 
 // Route for current cmd.
