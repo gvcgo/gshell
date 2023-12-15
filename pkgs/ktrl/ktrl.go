@@ -20,7 +20,8 @@ import (
 )
 
 const (
-	PingRoute string = "/ping"
+	PingRoute    string = "/ping"
+	PingResponse string = "pong"
 )
 
 type Ktrl struct {
@@ -238,7 +239,7 @@ func (k *Ktrl) addServerHandlers() {
 	}
 	// Check if server is running.
 	k.engine.GET(PingRoute, func(gctx *gin.Context) {
-		gctx.JSON(200, gin.H{"message": "pong"})
+		gctx.JSON(200, gin.H{"message": PingResponse})
 	})
 }
 
