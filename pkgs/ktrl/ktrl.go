@@ -41,6 +41,10 @@ func NewKtrl(cfg *KtrlConf) (k *Ktrl) {
 	return k
 }
 
+func (k *Ktrl) GetShell() (sh *shell.IShell) {
+	return k.iShell
+}
+
 func (k *Ktrl) AddCommand(kcmd *KtrlCommand) {
 	k.l.Lock()
 	k.commands = append(k.commands, kcmd)

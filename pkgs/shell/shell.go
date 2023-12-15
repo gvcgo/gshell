@@ -19,8 +19,8 @@ func NewIShell() (s *IShell) {
 		Console: console.New("gshell"),
 	}
 	s.InitCommand()
-	s.Console.NewlineBefore = true
-	s.Console.NewlineAfter = true
+	s.Console.NewlineBefore = false
+	s.Console.NewlineAfter = false
 	s.Console.SetPrintLogo(func(c *console.Console) {
 		gprint.Yellow("Welcome to gshell!")
 	})
