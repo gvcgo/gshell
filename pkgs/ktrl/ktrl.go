@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	PingRoute    string = "/ping"
+	PingRoute    string = "/ping/"
 	PingResponse string = "pong"
 )
 
@@ -129,29 +129,30 @@ func (k *Ktrl) GetResult(ctx *KtrlContext) {
 
 func (k *Ktrl) addShellCmd() {
 	for _, c := range k.commands {
-		if c.RunFunc == nil {
+		command := c // replicate, in case "c" will be covered.
+		if command.RunFunc == nil {
 			continue
 		}
 		icmd := &cobra.Command{
-			Use:   c.Name,
-			Short: c.HelpStr,
-			Long:  c.LongHelpStr,
+			Use:   command.Name,
+			Short: command.HelpStr,
+			Long:  command.LongHelpStr,
 			Run: func(cmd *cobra.Command, args []string) {
 				ctx := &KtrlContext{
 					Command: cmd,
 					args:    args,
-					Options: c.Options,
-					Route:   c.GetRoute(),
+					Options: command.Options,
+					Route:   command.GetRoute(),
 					Type:    ContextTypeClient,
 				}
-				if !c.SendInRunFunc {
+				if !command.SendInRunFunc {
 					k.GetResult(ctx)
 				}
-				c.RunFunc(ctx)
+				command.RunFunc(ctx)
 			},
 		}
 
-		for _, opt := range c.Options {
+		for _, opt := range command.Options {
 			switch opt.Type {
 			case OptionTypeBool:
 				if opt.Short == "" {
@@ -179,10 +180,11 @@ func (k *Ktrl) addShellCmd() {
 				}
 			}
 		}
-		if c.Parent == "" {
+
+		if command.Parent == "" {
 			k.iShell.AddCommand(icmd)
 		} else {
-			k.iShell.AddSubCommand(c.Parent, icmd)
+			k.iShell.AddSubCommand(command.Parent, icmd)
 		}
 	}
 }
@@ -227,14 +229,15 @@ func (k *Ktrl) initEngine() {
 func (k *Ktrl) addServerHandlers() {
 	k.initEngine()
 	for _, c := range k.commands {
+		command := c // replicate, in case "c" will be covered.
 		ctx := &KtrlContext{
-			Route:   c.GetRoute(),
-			Options: c.Options,
+			Route:   command.GetRoute(),
+			Options: command.Options,
 			Type:    ContextTypeServer,
 		}
 		k.engine.GET(ctx.Route, func(gctx *gin.Context) {
 			ctx.GinCtx = gctx
-			c.Handler(ctx)
+			command.Handler(ctx)
 		})
 	}
 	// Check if server is running.
