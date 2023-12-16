@@ -10,8 +10,9 @@ import (
 )
 
 type IShell struct {
-	Console *console.Console
-	RootCmd *cobra.Command
+	Console   *console.Console
+	RootCmd   *cobra.Command
+	SetPrompt func(*console.Menu)
 }
 
 func NewIShell() (s *IShell) {
@@ -41,13 +42,20 @@ func (s *IShell) InitCommand() {
 	})
 }
 
+func (s *IShell) SetupPrompt(setp func(*console.Menu)) {
+	s.SetPrompt = setp
+}
+
 func (s *IShell) Start() error {
 	// By default the shell as created a single menu and
 	// made it current, so you can access it and set it up.
 	menu := s.Console.ActiveMenu()
 
 	// Set some custom prompt handlers for this menu.
-	SetupPrompt(menu)
+	if s.SetPrompt == nil {
+		s.SetPrompt = SetupPrompt
+	}
+	s.SetPrompt(menu)
 
 	// We bind a special handler for this menu, which will exit the
 	// application (with confirm), when the shell readline receives

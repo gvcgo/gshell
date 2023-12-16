@@ -25,7 +25,7 @@ const (
 )
 
 type Ktrl struct {
-	IShell   *shell.IShell
+	iShell   *shell.IShell
 	client   *http.Client
 	engine   *gin.Engine
 	conf     *KtrlConf
@@ -42,7 +42,7 @@ func NewKtrl(cfg *KtrlConf) (k *Ktrl) {
 }
 
 func (k *Ktrl) GetShell() (sh *shell.IShell) {
-	return k.IShell
+	return k.iShell
 }
 
 func (k *Ktrl) AddCommand(kcmd *KtrlCommand) {
@@ -186,9 +186,9 @@ func (k *Ktrl) addShellCmd() {
 		}
 
 		if command.Parent == "" {
-			k.IShell.AddCommand(icmd)
+			k.iShell.AddCommand(icmd)
 		} else {
-			k.IShell.AddSubCommand(command.Parent, icmd)
+			k.iShell.AddSubCommand(command.Parent, icmd)
 		}
 	}
 }
@@ -207,16 +207,22 @@ func (k *Ktrl) SendMsg(name, parent string, options []*Option, args ...string) (
 }
 
 func (k *Ktrl) SetPrintLogo(f func(_ *console.Console)) {
-	k.IShell.SetPrintLogo(f)
+	k.iShell.SetPrintLogo(f)
+}
+
+func (k *Ktrl) PreShellStart() {
+	if k.iShell == nil {
+		k.iShell = shell.NewIShell()
+		k.iShell.SetHistoryFilePath(k.conf.HistoryFilePath, k.conf.MaxHistoryLines, true)
+	}
+	k.addShellCmd()
 }
 
 func (k *Ktrl) StartShell() error {
-	if k.IShell == nil {
-		k.IShell = shell.NewIShell()
-		k.IShell.SetHistoryFilePath(k.conf.HistoryFilePath, k.conf.MaxHistoryLines, true)
+	if k.iShell == nil {
+		k.PreShellStart()
 	}
-	k.addShellCmd()
-	err := k.IShell.Start()
+	err := k.iShell.Start()
 	return err
 }
 
@@ -281,8 +287,17 @@ func (k *Ktrl) listen() error {
 	return http.Serve(listener, k.engine)
 }
 
-func (k *Ktrl) StartServer() {
-	k.initEngine()
+func (k *Ktrl) PreServerStart() {
+	if k.engine == nil {
+		gin.SetMode(gin.ReleaseMode)
+		k.engine = gin.New()
+	}
 	k.addServerHandlers()
+}
+
+func (k *Ktrl) StartServer() {
+	if k.engine == nil {
+		k.PreServerStart()
+	}
 	k.listen()
 }
