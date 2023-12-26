@@ -131,6 +131,25 @@ func (k *Ktrl) GetResult(ctx *KtrlContext) {
 	ctx.Result, _ = io.ReadAll(resp.Body)
 }
 
+func (k *Ktrl) resetFlags(cmd *cobra.Command, opts []*Option) {
+	if cmd == nil {
+		return
+	}
+	cmd.ResetFlags()
+	for _, opt := range opts {
+		switch opt.Type {
+		case OptionTypeBool:
+			cmd.Flags().BoolP(opt.Name, opt.Short, gconv.Bool(opt.Default), opt.Usage)
+		case OptionTypeInt:
+			cmd.Flags().IntP(opt.Name, opt.Short, gconv.Int(opt.Default), opt.Usage)
+		case OptionTypeFloat:
+			cmd.Flags().Float64P(opt.Name, opt.Short, gconv.Float64(opt.Default), opt.Usage)
+		default:
+			cmd.Flags().StringP(opt.Name, opt.Short, opt.Default, opt.Usage)
+		}
+	}
+}
+
 func (k *Ktrl) addShellCmd() {
 	for _, c := range k.commands {
 		command := c // replicate, in case "c" will be covered.
@@ -153,37 +172,10 @@ func (k *Ktrl) addShellCmd() {
 					k.GetResult(ctx)
 				}
 				command.RunFunc(ctx)
+				k.resetFlags(cmd, command.Options)
 			},
 		}
-
-		for _, opt := range command.Options {
-			switch opt.Type {
-			case OptionTypeBool:
-				if opt.Short == "" {
-					icmd.Flags().Bool(opt.Name, gconv.Bool(opt.Default), opt.Usage)
-				} else {
-					icmd.Flags().BoolP(opt.Name, opt.Short, gconv.Bool(opt.Default), opt.Usage)
-				}
-			case OptionTypeInt:
-				if opt.Short == "" {
-					icmd.Flags().Int(opt.Name, gconv.Int(opt.Default), opt.Usage)
-				} else {
-					icmd.Flags().IntP(opt.Name, opt.Short, gconv.Int(opt.Default), opt.Usage)
-				}
-			case OptionTypeFloat:
-				if opt.Short == "" {
-					icmd.Flags().Float64(opt.Name, gconv.Float64(opt.Default), opt.Usage)
-				} else {
-					icmd.Flags().Float64P(opt.Name, opt.Short, gconv.Float64(opt.Default), opt.Usage)
-				}
-			default:
-				if opt.Short == "" {
-					icmd.Flags().String(opt.Name, opt.Default, opt.Usage)
-				} else {
-					icmd.Flags().StringP(opt.Name, opt.Short, opt.Default, opt.Usage)
-				}
-			}
-		}
+		k.resetFlags(icmd, command.Options)
 
 		if command.Parent == "" {
 			k.iShell.AddCommand(icmd)

@@ -50,3 +50,210 @@
 {"Index":48,"DateTime":"2023-12-11T15:52:43.697574+08:00","Block":"help"}
 {"Index":49,"DateTime":"2023-12-11T15:52:56.177861+08:00","Block":"show -v=1@3 -e a b"}
 {"Index":50,"DateTime":"2023-12-11T15:53:00.297739+08:00","Block":"exit"}
+{"Index":51,"DateTime":"2023-12-26T20:28:28.32579+08:00","Block":"help"}
+{"Index":52,"DateTime":"2023-12-26T20:28:35.0799+08:00","Block":"show -h"}
+{"Index":53,"DateTime":"2023-12-26T20:28:42.772675+08:00","Block":"show"}
+{"Index":54,"DateTime":"2023-12-26T20:28:54.478055+08:00","Block":"show -e"}
+{"Index":55,"DateTime":"2023-12-26T20:29:14.672157+08:00","Block":"show -e -v=abc"}
+{"Index":56,"DateTime":"2023-12-26T20:29:23.466666+08:00","Block":"show"}
+{"Index":57,"DateTime":"2023-12-26T20:29:26.054112+08:00","Block":"exit"}
+{"Index":58,"DateTime":"2023-12-26T20:29:31.887185+08:00","Block":"show -e -v=abc"}
+{"Index":59,"DateTime":"2023-12-26T20:29:39.232378+08:00","Block":"show"}
+{"Index":60,"DateTime":"2023-12-26T20:29:44.576875+08:00","Block":"show -h"}
+{"Index":61,"DateTime":"2023-12-26T20:29:48.430128+08:00","Block":"show"}
+{"Index":62,"DateTime":"2023-12-26T20:29:53.408745+08:00","Block":"-h"}
+{"Index":63,"DateTime":"2023-12-26T20:29:59.205614+08:00","Block":"show"}
+{"Index":64,"DateTime":"2023-12-26T20:30:08.748886+08:00","Block":"show -h"}
+{"Index":65,"DateTime":"2023-12-26T20:30:12.679971+08:00","Block":"exi"}
+{"Index":66,"DateTime":"2023-12-26T20:30:16.114453+08:00","Block":"exit"}
+{"Index":67,"DateTime":"2023-12-26T20:30:24.330273+08:00","Block":"show"}
+{"Index":68,"DateTime":"2023-12-26T20:30:44.739346+08:00","Block":"show help"}
+{"Index":69,"DateTime":"2023-12-26T20:30:52.89714+08:00","Block":"show --help"}
+{"Index":70,"DateTime":"2023-12-26T20:30:55.708274+08:00","Block":"show"}
+{"Index":71,"DateTime":"2023-12-26T20:31:01.911674+08:00","Block":"show --help"}
+{"Index":72,"DateTime":"2023-12-26T20:31:10.344542+08:00","Block":"show helpo"}
+{"Index":73,"DateTime":"2023-12-26T20:31:26.058557+08:00","Block":"show jjjjjjjjjjjjjjjjjjjjjjjj"}
+{"Index":74,"DateTime":"2023-12-26T20:31:31.238015+08:00","Block":"show"}
+{"Index":75,"DateTime":"2023-12-26T20:31:40.422676+08:00","Block":"show -h"}
+{"Index":76,"DateTime":"2023-12-26T20:31:42.94433+08:00","Block":"show"}
+{"Index":77,"DateTime":"2023-12-26T20:31:52.725439+08:00","Block":"show -h"}
+{"Index":78,"DateTime":"2023-12-26T20:32:00.547066+08:00","Block":"show -e"}
+{"Index":79,"DateTime":"2023-12-26T20:33:00.242829+08:00","Block":"show -h"}
+{"Index":80,"DateTime":"2023-12-26T20:33:03.46034+08:00","Block":"show"}
+{"Index":81,"DateTime":"2023-12-26T20:33:10.552104+08:00","Block":"show -e"}
+{"Index":79,"DateTime":"2023-12-26T20:33:16.628558+08:00","Block":"exit"}
+{"Index":82,"DateTime":"2023-12-26T20:38:03.069523+08:00","Block":"-h"}
+{"Index":83,"DateTime":"2023-12-26T20:38:08.861237+08:00","Block":"exit"}
+{"Index":85,"DateTime":"2023-12-26T20:38:13.594158+08:00","Block":"-h"}
+{"Index":86,"DateTime":"2023-12-26T20:38:17.626446+08:00","Block":"show"}
+{"Index":87,"DateTime":"2023-12-26T20:38:23.21426+08:00","Block":"show -h"}
+{"Index":88,"DateTime":"2023-12-26T20:38:24.922006+08:00","Block":"show"}
+{"Index":89,"DateTime":"2023-12-26T20:38:29.693943+08:00","Block":"exit"}
+{"Index":90,"DateTime":"2023-12-26T20:38:35.557225+08:00","Block":"show -e"}
+{"Index":91,"DateTime":"2023-12-26T20:38:37.67612+08:00","Block":"show"}
+{"Index":92,"DateTime":"2023-12-26T20:39:06.407066+08:00","Block":"show -e -h"}
+{"Index":93,"DateTime":"2023-12-26T20:39:11.449077+08:00","Block":"show"}
+{"Index":94,"DateTime":"2023-12-26T20:39:16.324169+08:00","Block":"exit"}
+{"Index":95,"DateTime":"2023-12-26T21:01:39.53857+08:00","Block":"show -h"}
+{"Index":96,"DateTime":"2023-12-26T21:01:41.376401+08:00","Block":"show"}
+{"Index":97,"DateTime":"2023-12-26T21:01:44.906725+08:00","Block":"exit"}
+{"Index":98,"DateTime":"2023-12-26T21:02:08.483592+08:00","Block":"show"}
+{"Index":99,"DateTime":"2023-12-26T21:02:11.251031+08:00","Block":"show -h"}
+{"Index":100,"DateTime":"2023-12-26T21:02:16.540828+08:00","Block":"show"}
+{"Index":101,"DateTime":"2023-12-26T21:02:23.790807+08:00","Block":"show -e"}
+{"Index":102,"DateTime":"2023-12-26T21:02:29.067954+08:00","Block":"show"}
+{"Index":103,"DateTime":"2023-12-26T21:02:30.950211+08:00","Block":"ext"}
+{"Index":104,"DateTime":"2023-12-26T21:02:32.765961+08:00","Block":"exitt"}
+{"Index":105,"DateTime":"2023-12-26T21:02:34.794257+08:00","Block":"exi"}
+{"Index":106,"DateTime":"2023-12-26T21:02:37.886056+08:00","Block":"exit"}
+{"Index":107,"DateTime":"2023-12-26T21:02:42.603616+08:00","Block":"show"}
+{"Index":108,"DateTime":"2023-12-26T21:02:47.737033+08:00","Block":"show -e"}
+{"Index":109,"DateTime":"2023-12-26T21:02:51.424403+08:00","Block":"show"}
+{"Index":110,"DateTime":"2023-12-26T21:02:55.449637+08:00","Block":"show - e"}
+{"Index":111,"DateTime":"2023-12-26T21:03:00.289379+08:00","Block":"show -e"}
+{"Index":112,"DateTime":"2023-12-26T21:03:04.065328+08:00","Block":"exit"}
+{"Index":113,"DateTime":"2023-12-26T21:11:16.553204+08:00","Block":"show"}
+{"Index":114,"DateTime":"2023-12-26T21:11:20.21588+08:00","Block":"show -h"}
+{"Index":115,"DateTime":"2023-12-26T21:11:21.86124+08:00","Block":"show"}
+{"Index":116,"DateTime":"2023-12-26T21:11:27.471284+08:00","Block":"exit"}
+{"Index":117,"DateTime":"2023-12-26T21:12:24.909195+08:00","Block":"show"}
+{"Index":118,"DateTime":"2023-12-26T21:12:30.12891+08:00","Block":"show -e"}
+{"Index":119,"DateTime":"2023-12-26T21:12:31.753267+08:00","Block":"show"}
+{"Index":120,"DateTime":"2023-12-26T21:12:42.586576+08:00","Block":"show -h"}
+{"Index":121,"DateTime":"2023-12-26T21:12:47.344052+08:00","Block":"show -e"}
+{"Index":122,"DateTime":"2023-12-26T21:12:52.64376+08:00","Block":"show"}
+{"Index":123,"DateTime":"2023-12-26T21:12:58.386436+08:00","Block":"show -e"}
+{"Index":124,"DateTime":"2023-12-26T21:13:01.678496+08:00","Block":"show"}
+{"Index":125,"DateTime":"2023-12-26T21:13:07.169599+08:00","Block":"show -h"}
+{"Index":126,"DateTime":"2023-12-26T21:13:09.512425+08:00","Block":"show -e"}
+{"Index":127,"DateTime":"2023-12-26T21:13:13.444528+08:00","Block":"exit"}
+{"Index":128,"DateTime":"2023-12-26T21:14:21.802566+08:00","Block":"show"}
+{"Index":129,"DateTime":"2023-12-26T21:14:25.589802+08:00","Block":"show -e"}
+{"Index":130,"DateTime":"2023-12-26T21:14:30.04887+08:00","Block":"show"}
+{"Index":131,"DateTime":"2023-12-26T21:14:33.554938+08:00","Block":"show -e"}
+{"Index":132,"DateTime":"2023-12-26T21:14:37.430942+08:00","Block":"show -h"}
+{"Index":133,"DateTime":"2023-12-26T21:14:39.526031+08:00","Block":"show"}
+{"Index":134,"DateTime":"2023-12-26T21:14:45.285075+08:00","Block":"exit"}
+{"Index":135,"DateTime":"2023-12-26T21:15:44.102303+08:00","Block":"show"}
+{"Index":136,"DateTime":"2023-12-26T21:15:47.005304+08:00","Block":"show -e"}
+{"Index":137,"DateTime":"2023-12-26T21:15:51.755581+08:00","Block":"show -h"}
+{"Index":138,"DateTime":"2023-12-26T21:15:53.985684+08:00","Block":"show"}
+{"Index":139,"DateTime":"2023-12-26T21:15:56.921398+08:00","Block":"show -e"}
+{"Index":140,"DateTime":"2023-12-26T21:15:59.219322+08:00","Block":"show"}
+{"Index":141,"DateTime":"2023-12-26T21:16:01.23555+08:00","Block":"exit"}
+{"Index":142,"DateTime":"2023-12-26T21:16:05.671942+08:00","Block":"show"}
+{"Index":143,"DateTime":"2023-12-26T21:16:08.182789+08:00","Block":"show -e"}
+{"Index":144,"DateTime":"2023-12-26T21:16:10.804075+08:00","Block":"show"}
+{"Index":145,"DateTime":"2023-12-26T21:16:14.131084+08:00","Block":"show -h"}
+{"Index":146,"DateTime":"2023-12-26T21:16:15.633035+08:00","Block":"show"}
+{"Index":147,"DateTime":"2023-12-26T21:16:19.085133+08:00","Block":"show -e"}
+{"Index":148,"DateTime":"2023-12-26T21:16:28.788016+08:00","Block":"show"}
+{"Index":149,"DateTime":"2023-12-26T21:16:31.209287+08:00","Block":"exit"}
+{"Index":150,"DateTime":"2023-12-26T21:17:18.179488+08:00","Block":"show"}
+{"Index":151,"DateTime":"2023-12-26T21:17:20.465732+08:00","Block":"show -e"}
+{"Index":152,"DateTime":"2023-12-26T21:17:21.587121+08:00","Block":"show"}
+{"Index":153,"DateTime":"2023-12-26T21:17:27.531445+08:00","Block":"show -e"}
+{"Index":154,"DateTime":"2023-12-26T21:17:31.718618+08:00","Block":"show -h"}
+{"Index":155,"DateTime":"2023-12-26T21:17:33.668545+08:00","Block":"show"}
+{"Index":156,"DateTime":"2023-12-26T21:17:39.081486+08:00","Block":"show -e"}
+{"Index":157,"DateTime":"2023-12-26T21:21:08.559782+08:00","Block":"exit"}
+{"Index":158,"DateTime":"2023-12-26T21:21:15.881113+08:00","Block":"show"}
+{"Index":159,"DateTime":"2023-12-26T21:21:17.888708+08:00","Block":"show -e"}
+{"Index":160,"DateTime":"2023-12-26T21:21:20.780715+08:00","Block":"show -h"}
+{"Index":161,"DateTime":"2023-12-26T21:21:22.473625+08:00","Block":"show"}
+{"Index":162,"DateTime":"2023-12-26T21:21:25.197825+08:00","Block":"show -e"}
+{"Index":163,"DateTime":"2023-12-26T21:21:26.575458+08:00","Block":"exit"}
+{"Index":164,"DateTime":"2023-12-26T21:22:24.942828+08:00","Block":"help"}
+{"Index":165,"DateTime":"2023-12-26T21:22:28.616324+08:00","Block":"show hep"}
+{"Index":166,"DateTime":"2023-12-26T21:22:33.052966+08:00","Block":"show help"}
+{"Index":167,"DateTime":"2023-12-26T21:22:37.043711+08:00","Block":"show -h"}
+{"Index":168,"DateTime":"2023-12-26T21:22:38.339038+08:00","Block":"show"}
+{"Index":169,"DateTime":"2023-12-26T21:23:59.935316+08:00","Block":"help"}
+{"Index":170,"DateTime":"2023-12-26T21:24:01.413435+08:00","Block":"show"}
+{"Index":171,"DateTime":"2023-12-26T21:24:03.40836+08:00","Block":"show -e"}
+{"Index":172,"DateTime":"2023-12-26T21:24:06.099434+08:00","Block":"show -h"}
+{"Index":173,"DateTime":"2023-12-26T21:24:07.632683+08:00","Block":"show"}
+{"Index":174,"DateTime":"2023-12-26T21:24:10.525491+08:00","Block":"exit"}
+{"Index":175,"DateTime":"2023-12-26T21:24:48.501162+08:00","Block":"show"}
+{"Index":176,"DateTime":"2023-12-26T21:24:50.316271+08:00","Block":"show -e"}
+{"Index":177,"DateTime":"2023-12-26T21:24:52.926309+08:00","Block":"show -h"}
+{"Index":178,"DateTime":"2023-12-26T21:24:54.540267+08:00","Block":"show"}
+{"Index":179,"DateTime":"2023-12-26T21:24:56.064355+08:00","Block":"exit"}
+{"Index":169,"DateTime":"2023-12-26T21:30:37.133809+08:00","Block":"exi"}
+{"Index":170,"DateTime":"2023-12-26T21:30:38.902982+08:00","Block":"exit"}
+{"Index":182,"DateTime":"2023-12-26T21:30:47.187203+08:00","Block":"show"}
+{"Index":183,"DateTime":"2023-12-26T21:30:58.834927+08:00","Block":"exit"}
+{"Index":184,"DateTime":"2023-12-26T21:31:51.8386+08:00","Block":"show"}
+{"Index":185,"DateTime":"2023-12-26T21:32:03.263893+08:00","Block":"show -v"}
+{"Index":186,"DateTime":"2023-12-26T21:32:12.428+08:00","Block":"show -h"}
+{"Index":187,"DateTime":"2023-12-26T21:32:21.9514+08:00","Block":"show"}
+{"Index":188,"DateTime":"2023-12-26T21:32:29.199383+08:00","Block":"show -h"}
+{"Index":189,"DateTime":"2023-12-26T21:32:33.086591+08:00","Block":"show"}
+{"Index":190,"DateTime":"2023-12-26T21:33:17.72277+08:00","Block":"-h"}
+{"Index":191,"DateTime":"2023-12-26T21:33:23.984804+08:00","Block":"help"}
+{"Index":192,"DateTime":"2023-12-26T21:33:27.489569+08:00","Block":"exit"}
+{"Index":193,"DateTime":"2023-12-26T21:33:31.636607+08:00","Block":"show"}
+{"Index":194,"DateTime":"2023-12-26T21:33:42.217969+08:00","Block":"show -"}
+{"Index":195,"DateTime":"2023-12-26T21:33:45.218041+08:00","Block":"show -v"}
+{"Index":196,"DateTime":"2023-12-26T21:38:06.999802+08:00","Block":"exi"}
+{"Index":197,"DateTime":"2023-12-26T21:38:09.297685+08:00","Block":"exit"}
+{"Index":198,"DateTime":"2023-12-26T21:38:22.611982+08:00","Block":"show"}
+{"Index":199,"DateTime":"2023-12-26T21:38:26.097192+08:00","Block":"show -h"}
+{"Index":200,"DateTime":"2023-12-26T21:38:30.090235+08:00","Block":"show"}
+{"Index":201,"DateTime":"2023-12-26T21:38:36.58045+08:00","Block":"show --help"}
+{"Index":202,"DateTime":"2023-12-26T21:38:40.018117+08:00","Block":"show help"}
+{"Index":203,"DateTime":"2023-12-26T21:38:42.306019+08:00","Block":"exit"}
+{"Index":204,"DateTime":"2023-12-26T21:38:53.711463+08:00","Block":"show"}
+{"Index":205,"DateTime":"2023-12-26T21:42:09.95848+08:00","Block":"exit"}
+{"Index":206,"DateTime":"2023-12-26T21:42:17.418949+08:00","Block":"show"}
+{"Index":207,"DateTime":"2023-12-26T21:42:21.049338+08:00","Block":"show -v"}
+{"Index":208,"DateTime":"2023-12-26T21:42:25.162258+08:00","Block":"show -i"}
+{"Index":209,"DateTime":"2023-12-26T21:42:28.065723+08:00","Block":"exit"}
+{"Index":210,"DateTime":"2023-12-26T21:42:33.412463+08:00","Block":"show -i"}
+{"Index":211,"DateTime":"2023-12-26T21:42:50.676761+08:00","Block":"show -e"}
+{"Index":212,"DateTime":"2023-12-26T21:42:55.013895+08:00","Block":"show -v"}
+{"Index":213,"DateTime":"2023-12-26T21:42:57.154774+08:00","Block":"show -i"}
+{"Index":214,"DateTime":"2023-12-26T21:42:58.600983+08:00","Block":"show"}
+{"Index":215,"DateTime":"2023-12-26T21:43:02.83418+08:00","Block":"show -h"}
+{"Index":216,"DateTime":"2023-12-26T21:43:04.066931+08:00","Block":"show"}
+{"Index":217,"DateTime":"2023-12-26T21:43:06.553866+08:00","Block":"show -i"}
+{"Index":218,"DateTime":"2023-12-26T21:43:08.177806+08:00","Block":"exit"}
+{"Index":219,"DateTime":"2023-12-26T21:43:22.722518+08:00","Block":"show"}
+{"Index":220,"DateTime":"2023-12-26T21:43:25.614617+08:00","Block":"show -"}
+{"Index":221,"DateTime":"2023-12-26T21:43:28.662511+08:00","Block":"show -i"}
+{"Index":222,"DateTime":"2023-12-26T21:43:32.36337+08:00","Block":"show"}
+{"Index":223,"DateTime":"2023-12-26T21:43:35.538025+08:00","Block":"show -i"}
+{"Index":224,"DateTime":"2023-12-26T21:43:39.772147+08:00","Block":"show -h"}
+{"Index":225,"DateTime":"2023-12-26T21:43:41.051834+08:00","Block":"show"}
+{"Index":226,"DateTime":"2023-12-26T21:43:47.641786+08:00","Block":"exit"}
+{"Index":227,"DateTime":"2023-12-26T21:52:44.332375+08:00","Block":"show"}
+{"Index":228,"DateTime":"2023-12-26T21:52:53.083779+08:00","Block":"show -i"}
+{"Index":229,"DateTime":"2023-12-26T21:52:59.833585+08:00","Block":"show"}
+{"Index":230,"DateTime":"2023-12-26T21:53:08.371016+08:00","Block":"show -h"}
+{"Index":231,"DateTime":"2023-12-26T21:53:10.778193+08:00","Block":"show"}
+{"Index":232,"DateTime":"2023-12-26T22:22:36.925871+08:00","Block":"exit"}
+{"Index":233,"DateTime":"2023-12-26T22:22:45.200002+08:00","Block":"help"}
+{"Index":234,"DateTime":"2023-12-26T22:22:55.78145+08:00","Block":"show"}
+{"Index":235,"DateTime":"2023-12-26T22:22:57.754372+08:00","Block":"show -e"}
+{"Index":236,"DateTime":"2023-12-26T22:22:59.862364+08:00","Block":"show"}
+{"Index":237,"DateTime":"2023-12-26T22:23:03.7744+08:00","Block":"show -h"}
+{"Index":238,"DateTime":"2023-12-26T22:23:05.16445+08:00","Block":"show"}
+{"Index":239,"DateTime":"2023-12-26T22:23:11.104232+08:00","Block":"exit"}
+{"Index":240,"DateTime":"2023-12-26T22:23:16.675732+08:00","Block":"show"}
+{"Index":241,"DateTime":"2023-12-26T22:23:19.491258+08:00","Block":"show -e"}
+{"Index":242,"DateTime":"2023-12-26T22:23:28.366927+08:00","Block":"show -v"}
+{"Index":243,"DateTime":"2023-12-26T22:23:42.624779+08:00","Block":"show -e"}
+{"Index":244,"DateTime":"2023-12-26T22:23:53.024094+08:00","Block":"show -v=123"}
+{"Index":245,"DateTime":"2023-12-26T22:23:56.062212+08:00","Block":"show"}
+{"Index":246,"DateTime":"2023-12-26T22:24:08.044521+08:00","Block":"show -h"}
+{"Index":247,"DateTime":"2023-12-26T22:24:09.389387+08:00","Block":"show"}
+{"Index":248,"DateTime":"2023-12-26T22:24:15.596687+08:00","Block":"-h"}
+{"Index":249,"DateTime":"2023-12-26T22:24:22.499392+08:00","Block":"exit"}
+{"Index":250,"DateTime":"2023-12-26T22:35:38.994867+08:00","Block":"help"}
+{"Index":251,"DateTime":"2023-12-26T22:35:41.475348+08:00","Block":"show"}
+{"Index":252,"DateTime":"2023-12-26T22:35:43.43981+08:00","Block":"show -v"}
+{"Index":253,"DateTime":"2023-12-26T22:35:48.073502+08:00","Block":"show -e"}
+{"Index":254,"DateTime":"2023-12-26T22:35:49.540917+08:00","Block":"show"}
+{"Index":255,"DateTime":"2023-12-26T22:35:53.381865+08:00","Block":"show -h"}
+{"Index":256,"DateTime":"2023-12-26T22:35:54.499718+08:00","Block":"show"}
+{"Index":257,"DateTime":"2023-12-26T22:35:58.464113+08:00","Block":"exit"}

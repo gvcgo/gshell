@@ -55,6 +55,6 @@ func RunKtrlSock() {
 		},
 	})
 	go k.StartServer()
-	time.Sleep(3 * time.Second)
+	time.Sleep(1 * time.Second)
 	k.StartShell()
 }

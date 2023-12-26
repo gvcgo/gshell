@@ -6,7 +6,12 @@ import (
 
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/reeflective/console"
+	"github.com/reeflective/console/commands/readline"
 	"github.com/spf13/cobra"
+)
+
+const (
+	GroupID string = "core"
 )
 
 type IShell struct {
@@ -21,7 +26,7 @@ func NewIShell() (s *IShell) {
 	}
 	s.InitCommand()
 	s.Console.NewlineBefore = false
-	s.Console.NewlineAfter = false
+	s.Console.NewlineAfter = true
 	s.Console.SetPrintLogo(func(c *console.Console) {
 		gprint.Yellow("Welcome to gshell!")
 	})
@@ -32,9 +37,16 @@ func (s *IShell) InitCommand() {
 	if s.RootCmd == nil {
 		s.RootCmd = &cobra.Command{}
 	}
+	s.RootCmd.AddGroup(&cobra.Group{
+		ID:    GroupID,
+		Title: "gshell commands",
+	})
+	// Readline subcommands
+	s.RootCmd.AddCommand(readline.Commands(s.Console.Shell()))
 	s.AddCommand(&cobra.Command{
-		Use:   "exit",
-		Short: "Exit gshell.",
+		Use:     "exit",
+		Short:   "Exit gshell.",
+		GroupID: GroupID,
 		Run: func(cmd *cobra.Command, args []string) {
 			gprint.Yellow("Exiting...")
 			os.Exit(0)
@@ -63,7 +75,8 @@ func (s *IShell) Start() error {
 	menu.AddInterrupt(io.EOF, ExitCtrlD)
 
 	menu.SetCommands(func() *cobra.Command {
-		s.RootCmd.InitDefaultHelpCmd()
+		s.RootCmd.SetHelpCommandGroupID(GroupID)
+		s.RootCmd.InitDefaultHelpFlag()
 		s.RootCmd.CompletionOptions.DisableDefaultCmd = true
 		s.RootCmd.DisableFlagsInUseLine = true
 		return s.RootCmd
@@ -76,6 +89,9 @@ func (s *IShell) Start() error {
 func (s *IShell) AddCommand(cmds ...*cobra.Command) {
 	if s.RootCmd == nil {
 		return
+	}
+	for _, c := range cmds {
+		c.GroupID = GroupID
 	}
 	s.RootCmd.AddCommand(cmds...)
 }
