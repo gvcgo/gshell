@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gogf/gf/util/gconv"
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/reeflective/console"
 	"github.com/reeflective/readline"
@@ -20,16 +21,18 @@ const (
 
 type IShell struct {
 	Console   *console.Console
-	RootCmd   *cobra.Command
 	SetPrompt func(*console.Menu)
 	History   readline.History
+	cmdList   []*ShellCmd
+	flags     map[string][]IShellFlag
 }
 
 func NewIShell() (s *IShell) {
 	s = &IShell{
 		Console: console.New("gshell"),
+		flags:   map[string][]IShellFlag{},
+		cmdList: []*ShellCmd{},
 	}
-	s.initCommand()
 	s.Console.NewlineBefore = false
 	s.Console.NewlineAfter = true
 	s.Console.SetPrintLogo(func(c *console.Console) {
@@ -38,16 +41,27 @@ func NewIShell() (s *IShell) {
 	return
 }
 
-func (s *IShell) initCommand() {
-	if s.RootCmd == nil {
-		s.RootCmd = &cobra.Command{
-			Short: "This is an interactive shell powere by gshell.",
-		}
-	}
-}
-
 func (s *IShell) SetupPrompt(setp func(*console.Menu)) {
 	s.SetPrompt = setp
+}
+
+func (s *IShell) setFlags(command *cobra.Command, opts ...*Flag) {
+	if command == nil || len(opts) == 0 {
+		return
+	}
+	command.ResetFlags()
+	for _, opt := range opts {
+		switch opt.GetType() {
+		case OptionTypeBool:
+			command.Flags().BoolP(opt.GetName(), opt.GetShort(), gconv.Bool(opt.GetDefault()), opt.GetUsage())
+		case OptionTypeInt:
+			command.Flags().IntP(opt.GetName(), opt.GetShort(), gconv.Int(opt.GetDefault()), opt.GetUsage())
+		case OptionTypeFloat:
+			command.Flags().Float64P(opt.GetName(), opt.GetShort(), gconv.Float64(opt.GetDefault()), opt.GetUsage())
+		default:
+			command.Flags().StringP(opt.GetName(), opt.GetShort(), opt.GetDefault(), opt.GetUsage())
+		}
+	}
 }
 
 func (s *IShell) Start() error {
@@ -89,24 +103,26 @@ func (s *IShell) Start() error {
 			},
 		})
 
-		for _, c := range s.RootCmd.Commands() {
-			if c.Name() == "help" {
-				continue
-			}
-			cmd := &cobra.Command{
-				Use:     c.Use,
-				Short:   c.Short,
+		for _, c := range s.cmdList {
+			command := &cobra.Command{
+				Use:     c.Name,
+				Short:   c.HelpStr,
+				Long:    c.LongHelpStr,
 				GroupID: GroupID,
 				Run:     c.Run,
 			}
-			for _, sc := range c.Commands() {
-				cmd.AddCommand(&cobra.Command{
-					Use:   sc.Use,
-					Short: sc.Short,
-					Run:   sc.Run,
-				})
+			s.setFlags(command, c.Options...)
+			for _, child := range c.Children {
+				subCmd := &cobra.Command{
+					Use:   child.Name,
+					Short: child.HelpStr,
+					Long:  child.LongHelpStr,
+					Run:   child.Run,
+				}
+				s.setFlags(subCmd, child.Options...)
+				command.AddCommand(subCmd) // add subcommand
 			}
-			rootCmd.AddCommand(cmd)
+			rootCmd.AddCommand(command)
 		}
 
 		for _, cmd := range rootCmd.Commands() {
@@ -158,27 +174,17 @@ func (s *IShell) Start() error {
 	return err
 }
 
-func (s *IShell) AddCommand(cmds ...*cobra.Command) {
-	s.initCommand()
-	for _, c := range cmds {
-		c.GroupID = GroupID
-	}
-	s.RootCmd.AddCommand(cmds...)
+func (s *IShell) AddCmd(command *ShellCmd) {
+	s.cmdList = append(s.cmdList, command)
 }
 
-func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
-	s.initCommand()
-	for _, cmd := range s.RootCmd.Commands() {
-		if cmd.Name() == parent {
-			cmd.AddCommand(cmds...)
+func (s *IShell) AddChild(parent string, command *ShellCmd) {
+	for _, c := range s.cmdList {
+		if c.Name == parent {
+			c.AddChild(command)
 			return
 		}
 	}
-
-	s.RootCmd.AddCommand(&cobra.Command{
-		Use: parent,
-	})
-	s.AddSubCommand(parent, cmds...)
 }
 
 func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {

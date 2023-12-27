@@ -268,3 +268,11 @@
 {"Index":266,"DateTime":"2023-12-26T22:42:17.845544+08:00","Block":"show -l"}
 {"Index":267,"DateTime":"2023-12-26T22:42:21.469191+08:00","Block":"show"}
 {"Index":268,"DateTime":"2023-12-26T22:42:23.789504+08:00","Block":"exit"}
+{"Index":269,"DateTime":"2023-12-27T16:20:23.307011+08:00","Block":"help"}
+{"Index":270,"DateTime":"2023-12-27T16:20:29.382671+08:00","Block":"show"}
+{"Index":271,"DateTime":"2023-12-27T16:20:32.589361+08:00","Block":"show -e"}
+{"Index":272,"DateTime":"2023-12-27T16:20:35.191135+08:00","Block":"show"}
+{"Index":273,"DateTime":"2023-12-27T16:20:43.577173+08:00","Block":"show -e -v=123"}
+{"Index":274,"DateTime":"2023-12-27T16:20:48.109624+08:00","Block":"show"}
+{"Index":275,"DateTime":"2023-12-27T16:20:55.476729+08:00","Block":"help"}
+{"Index":276,"DateTime":"2023-12-27T16:21:02.56261+08:00","Block":"exit"}

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/moqsien/gshell/pkgs/ktrl"
+	"github.com/moqsien/gshell/pkgs/shell"
 )
 
 func RunKtrlTCP() {
@@ -22,18 +23,18 @@ func RunKtrlTCP() {
 	k.AddCommand(&ktrl.KtrlCommand{
 		Name:    "show",
 		HelpStr: "Show info.",
-		Options: []*ktrl.Option{
+		Options: []*shell.Flag{
 			{
 				Name:    "enable",
 				Short:   "e",
-				Type:    ktrl.OptionTypeBool,
+				Type:    shell.OptionTypeBool,
 				Default: "false",
 				Usage:   "to enable version[-enable]",
 			},
 			{
 				Name:    "version",
 				Short:   "v",
-				Type:    ktrl.OptionTypeString,
+				Type:    shell.OptionTypeString,
 				Default: "v0.0.1",
 				Usage:   "pass version string[--version=xxx]",
 			},

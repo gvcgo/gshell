@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/moqsien/gshell/pkgs/shell"
 	"github.com/spf13/cobra"
 )
 
@@ -37,7 +38,7 @@ type KtrlContext struct {
 	Command *cobra.Command
 	Route   string
 	args    []string
-	Options []*Option
+	Options []*shell.Flag
 	Result  []byte
 	Type    int8
 }
@@ -123,8 +124,8 @@ type KtrlCommand struct {
 	Parent        string                 // parent cmd name
 	HelpStr       string                 // Short for cobra cmd
 	LongHelpStr   string                 // Long for cobra cmd
+	Options       []*shell.Flag          // flags for cobra
 	SendInRunFunc bool                   // Send request in RunFunc
-	Options       []*Option              // flags for cobra
 	RunFunc       func(ctx *KtrlContext) // Not Nil. Hook for cobra.
 	Handler       func(ctx *KtrlContext) // Not Nil. Handler for server.
 }

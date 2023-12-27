@@ -92,24 +92,24 @@ func (k *Ktrl) GetResult(ctx *KtrlContext) {
 	params := map[string]string{}
 	if ctx.Command != nil {
 		for _, opt := range ctx.Options {
-			switch opt.Type {
-			case OptionTypeBool:
-				v, _ := ctx.Command.Flags().GetBool(opt.Name)
-				params[opt.Name] = gconv.String(v)
-			case OptionTypeInt:
-				v, _ := ctx.Command.Flags().GetInt(opt.Name)
-				params[opt.Name] = gconv.String(v)
-			case OptionTypeFloat:
-				v, _ := ctx.Command.Flags().GetFloat64(opt.Name)
-				params[opt.Name] = gconv.String(v)
+			switch opt.GetType() {
+			case shell.OptionTypeBool:
+				v, _ := ctx.Command.Flags().GetBool(opt.GetName())
+				params[opt.GetName()] = gconv.String(v)
+			case shell.OptionTypeInt:
+				v, _ := ctx.Command.Flags().GetInt(opt.GetName())
+				params[opt.GetName()] = gconv.String(v)
+			case shell.OptionTypeFloat:
+				v, _ := ctx.Command.Flags().GetFloat64(opt.GetName())
+				params[opt.GetName()] = gconv.String(v)
 			default:
-				v, _ := ctx.Command.Flags().GetString(opt.Name)
-				params[opt.Name] = v
+				v, _ := ctx.Command.Flags().GetString(opt.GetName())
+				params[opt.GetName()] = v
 			}
 		}
 	} else {
 		for _, opt := range ctx.Options {
-			params[opt.Name] = opt.Default
+			params[opt.GetName()] = opt.GetDefault()
 		}
 	}
 
@@ -131,62 +131,41 @@ func (k *Ktrl) GetResult(ctx *KtrlContext) {
 	ctx.Result, _ = io.ReadAll(resp.Body)
 }
 
-func (k *Ktrl) resetFlags(cmd *cobra.Command, opts []*Option) {
-	if cmd == nil {
-		return
-	}
-	cmd.ResetFlags()
-	for _, opt := range opts {
-		switch opt.Type {
-		case OptionTypeBool:
-			cmd.Flags().BoolP(opt.Name, opt.Short, gconv.Bool(opt.Default), opt.Usage)
-		case OptionTypeInt:
-			cmd.Flags().IntP(opt.Name, opt.Short, gconv.Int(opt.Default), opt.Usage)
-		case OptionTypeFloat:
-			cmd.Flags().Float64P(opt.Name, opt.Short, gconv.Float64(opt.Default), opt.Usage)
-		default:
-			cmd.Flags().StringP(opt.Name, opt.Short, opt.Default, opt.Usage)
-		}
-	}
-}
-
 func (k *Ktrl) addShellCmd() {
 	for _, c := range k.commands {
 		command := c // replicate, in case "c" will be covered.
 		if command.RunFunc == nil {
 			continue
 		}
-		icmd := &cobra.Command{
-			Use:   command.Name,
-			Short: command.HelpStr,
-			Long:  command.LongHelpStr,
-			Run: func(cmd *cobra.Command, args []string) {
-				ctx := &KtrlContext{
-					Command: cmd,
-					args:    args,
-					Options: command.Options,
-					Route:   command.GetRoute(),
-					Type:    ContextTypeClient,
-				}
-				if !command.SendInRunFunc {
-					k.GetResult(ctx)
-				}
-				command.RunFunc(ctx)
-				k.resetFlags(cmd, command.Options)
-			},
-		}
-		k.resetFlags(icmd, command.Options)
 
+		shellCmd := shell.NewShellCmd()
+		shellCmd.Name = command.Name
+		shellCmd.HelpStr = command.HelpStr
+		shellCmd.LongHelpStr = command.LongHelpStr
+		shellCmd.Options = command.Options
+		shellCmd.Run = func(cmd *cobra.Command, args []string) {
+			ctx := &KtrlContext{
+				Command: cmd,
+				args:    args,
+				Options: c.Options,
+				Route:   command.GetRoute(),
+				Type:    ContextTypeClient,
+			}
+			if !command.SendInRunFunc {
+				k.GetResult(ctx)
+			}
+			command.RunFunc(ctx)
+		}
 		if command.Parent == "" {
-			k.iShell.AddCommand(icmd)
+			k.iShell.AddCmd(shellCmd)
 		} else {
-			k.iShell.AddSubCommand(command.Parent, icmd)
+			k.iShell.AddChild(c.Parent, shellCmd)
 		}
 	}
 }
 
 // Send msg to server manually.
-func (k *Ktrl) SendMsg(name, parent string, options []*Option, args ...string) (r []byte) {
+func (k *Ktrl) SendMsg(name, parent string, options []*shell.Flag, args ...string) (r []byte) {
 	ctx := &KtrlContext{
 		Command: nil,
 		args:    args,
