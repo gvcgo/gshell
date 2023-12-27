@@ -1,13 +1,17 @@
 package shell
 
 import (
+	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/reeflective/console"
-	"github.com/reeflective/console/commands/readline"
+	"github.com/reeflective/readline"
+	"github.com/rsteube/carapace"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 const (
@@ -18,13 +22,14 @@ type IShell struct {
 	Console   *console.Console
 	RootCmd   *cobra.Command
 	SetPrompt func(*console.Menu)
+	History   readline.History
 }
 
 func NewIShell() (s *IShell) {
 	s = &IShell{
 		Console: console.New("gshell"),
 	}
-	s.InitCommand()
+	s.initCommand()
 	s.Console.NewlineBefore = false
 	s.Console.NewlineAfter = true
 	s.Console.SetPrintLogo(func(c *console.Console) {
@@ -33,25 +38,12 @@ func NewIShell() (s *IShell) {
 	return
 }
 
-func (s *IShell) InitCommand() {
+func (s *IShell) initCommand() {
 	if s.RootCmd == nil {
-		s.RootCmd = &cobra.Command{}
+		s.RootCmd = &cobra.Command{
+			Short: "This is an interactive shell powere by gshell.",
+		}
 	}
-	s.RootCmd.AddGroup(&cobra.Group{
-		ID:    GroupID,
-		Title: "gshell commands",
-	})
-	// Readline subcommands
-	s.RootCmd.AddCommand(readline.Commands(s.Console.Shell()))
-	s.AddCommand(&cobra.Command{
-		Use:     "exit",
-		Short:   "Exit gshell.",
-		GroupID: GroupID,
-		Run: func(cmd *cobra.Command, args []string) {
-			gprint.Yellow("Exiting...")
-			os.Exit(0)
-		},
-	})
 }
 
 func (s *IShell) SetupPrompt(setp func(*console.Menu)) {
@@ -69,17 +61,97 @@ func (s *IShell) Start() error {
 	}
 	s.SetPrompt(menu)
 
+	// history file
+	if s.History != nil {
+		menu.AddHistorySource("local_history", s.History)
+	}
+
 	// We bind a special handler for this menu, which will exit the
 	// application (with confirm), when the shell readline receives
 	// a Ctrl-D keystroke. You can map any error to any handler.
 	menu.AddInterrupt(io.EOF, ExitCtrlD)
 
 	menu.SetCommands(func() *cobra.Command {
-		s.RootCmd.SetHelpCommandGroupID(GroupID)
-		s.RootCmd.InitDefaultHelpFlag()
-		s.RootCmd.CompletionOptions.DisableDefaultCmd = true
-		s.RootCmd.DisableFlagsInUseLine = true
-		return s.RootCmd
+		rootCmd := &cobra.Command{
+			Short: "This is an interactive shell powered by gshell.",
+		}
+
+		rootCmd.AddGroup(&cobra.Group{ID: GroupID, Title: "gshell commands: "})
+
+		// additional commands
+		rootCmd.AddCommand(&cobra.Command{
+			Use:     "exit",
+			Short:   "Exit gshell.",
+			GroupID: GroupID,
+			Run: func(cmd *cobra.Command, args []string) {
+				gprint.Yellow("Exiting...")
+				os.Exit(0)
+			},
+		})
+
+		for _, c := range s.RootCmd.Commands() {
+			if c.Name() == "help" {
+				continue
+			}
+			cmd := &cobra.Command{
+				Use:     c.Use,
+				Short:   c.Short,
+				GroupID: GroupID,
+				Run:     c.Run,
+			}
+			for _, sc := range c.Commands() {
+				cmd.AddCommand(&cobra.Command{
+					Use:   sc.Use,
+					Short: sc.Short,
+					Run:   sc.Run,
+				})
+			}
+			rootCmd.AddCommand(cmd)
+		}
+
+		for _, cmd := range rootCmd.Commands() {
+			c := carapace.Gen(cmd)
+
+			if cmd.Args != nil {
+				c.PositionalAnyCompletion(
+					carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+						return carapace.ActionFiles()
+					}),
+				)
+			}
+
+			flagMap := make(carapace.ActionMap)
+			cmd.Flags().VisitAll(func(f *pflag.Flag) {
+				if f.Name == "file" || strings.Contains(f.Usage, "file") {
+					flagMap[f.Name] = carapace.ActionFiles()
+				}
+			})
+
+			if cmd.Name() == "ssh" {
+				// Generate a list of random hosts to use as positional arguments
+				hosts := make([]string, 0)
+				for i := 0; i < 10; i++ {
+					hosts = append(hosts, fmt.Sprintf("host%d", i))
+				}
+				c.PositionalCompletion(carapace.ActionValues(hosts...))
+			}
+
+			if cmd.Name() == "encrypt" {
+				cmd.Flags().VisitAll(func(f *pflag.Flag) {
+					if f.Name == "algorithm" {
+						flagMap[f.Name] = carapace.ActionValues("aes", "des", "blowfish")
+					}
+				})
+			}
+
+			c.FlagCompletion(flagMap)
+		}
+
+		rootCmd.SetHelpCommandGroupID(GroupID)
+		rootCmd.InitDefaultHelpFlag()
+		rootCmd.CompletionOptions.DisableDefaultCmd = true
+		rootCmd.DisableFlagsInUseLine = true
+		return rootCmd
 	})
 
 	err := s.Console.Start()
@@ -87,9 +159,7 @@ func (s *IShell) Start() error {
 }
 
 func (s *IShell) AddCommand(cmds ...*cobra.Command) {
-	if s.RootCmd == nil {
-		return
-	}
+	s.initCommand()
 	for _, c := range cmds {
 		c.GroupID = GroupID
 	}
@@ -97,9 +167,7 @@ func (s *IShell) AddCommand(cmds ...*cobra.Command) {
 }
 
 func (s *IShell) AddSubCommand(parent string, cmds ...*cobra.Command) {
-	if s.RootCmd == nil {
-		return
-	}
+	s.initCommand()
 	for _, cmd := range s.RootCmd.Commands() {
 		if cmd.Name() == parent {
 			cmd.AddCommand(cmds...)
@@ -118,13 +186,11 @@ func (s *IShell) SetPrintLogo(f func(_ *console.Console)) {
 }
 
 func (s *IShell) SetHistoryFilePath(fPath string, maxLine int, enableLocal ...bool) {
-	menu := s.Console.ActiveMenu()
 	// All menus currently each have a distinct, in-memory history source.
 	// Replace the main (current) menu's history with one writing to our
 	// application history file. The default history is named after its menu.
 	if fPath == "" {
 		fPath = ".gshell_local_history"
 	}
-	hist, _ := EmbeddedHistory(fPath, maxLine, enableLocal...)
-	menu.AddHistorySource("local_history", hist)
+	s.History, _ = EmbeddedHistory(fPath, maxLine, enableLocal...)
 }
