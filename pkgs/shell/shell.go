@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gogf/gf/util/gconv"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/reeflective/console"
 	"github.com/reeflective/readline"
