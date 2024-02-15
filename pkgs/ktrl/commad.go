@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/gvcgo/gshell/pkgs/shell"
 	"github.com/spf13/cobra"
 )
 

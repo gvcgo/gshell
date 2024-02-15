@@ -13,8 +13,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/moqsien/goutils/pkgs/gutils"
-	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/gvcgo/goutils/pkgs/gutils"
+	"github.com/gvcgo/gshell/pkgs/shell"
 	"github.com/reeflective/console"
 	"github.com/spf13/cobra"
 )

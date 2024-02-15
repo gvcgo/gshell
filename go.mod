@@ -1,11 +1,11 @@
-module github.com/moqsien/gshell
+module github.com/gvcgo/gshell
 
 go 1.21.5
 
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/gogf/gf/v2 v2.6.1
-	github.com/moqsien/goutils v0.7.8
+	github.com/gvcgo/goutils v0.8.5
 	github.com/reeflective/console v0.1.15
 	github.com/reeflective/readline v1.0.13
 	github.com/rsteube/carapace v0.47.5

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/moqsien/gshell/pkgs/ktrl"
-	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/gvcgo/gshell/pkgs/ktrl"
+	"github.com/gvcgo/gshell/pkgs/shell"
 )
 
 func RunKtrlTCP() {

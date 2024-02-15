@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/moqsien/goutils/pkgs/gutils"
+	"github.com/gvcgo/goutils/pkgs/gutils"
 	"github.com/reeflective/readline"
 )
 

@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/moqsien/goutils/pkgs/gtea/gprint"
-	"github.com/moqsien/gshell/pkgs/shell"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/gshell/pkgs/shell"
 	"github.com/reeflective/console"
 	"github.com/spf13/cobra"
 )
